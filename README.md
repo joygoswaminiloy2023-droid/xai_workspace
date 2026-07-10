@@ -13,7 +13,7 @@
 
 <br/>
 
-![Xai Intelligence Workspace — landing page](./Lsnding.png)
+![Xai Intelligence Workspace — landing page](./Image/Lsnding.png)
 
 </div>
 
