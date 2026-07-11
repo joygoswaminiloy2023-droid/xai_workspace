@@ -11,6 +11,10 @@
 [![Next.js](https://img.shields.io/badge/Next.js-App_Router-000000?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-black?style=for-the-badge&logo=framer)](https://www.framer.com/motion/)
 
+<br/>
+
+![Xai Intelligence Workspace — landing page](./Image/Lsnding.png)
+
 </div>
 
 ---
