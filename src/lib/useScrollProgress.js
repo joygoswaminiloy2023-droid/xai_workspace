@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-
 export function useScrollProgress() {
   const ref = useRef(null);
   const [progress, setProgress] = useState(0);
@@ -16,9 +15,14 @@ export function useScrollProgress() {
     const update = () => {
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight || 1;
-      const total = rect.height + vh;
-      const passed = vh - rect.top;
-      const p = Math.min(1, Math.max(0, passed / total));
+
+      // Distance the sticky child can travel while pinned inside this section
+      const scrollable = rect.height - vh;
+
+      // How far we've scrolled into the section (0 at section top, grows as you scroll down)
+      const passed = -rect.top;
+
+      const p = scrollable > 0 ? Math.min(1, Math.max(0, passed / scrollable)) : 0;
       setProgress(p);
       raf = 0;
     };
@@ -31,6 +35,7 @@ export function useScrollProgress() {
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);

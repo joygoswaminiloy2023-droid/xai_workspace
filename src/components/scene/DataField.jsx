@@ -17,6 +17,7 @@ function easeInOutCubic(t) {
 function Field({ progress }) {
   const pointsRef = useRef(null);
   const groupRef = useRef(null);
+  const displayProgress = useRef(0);
 
   const { chaos, grid, colorStart, colorEnd } = useMemo(() => {
     const chaos = new Float32Array(COUNT * 3);
@@ -27,9 +28,11 @@ function Field({ progress }) {
     const dataColor = new THREE.Color("#ff9457");
     const signalColor = new THREE.Color("#14e6c4");
 
- 
-    const side = Math.round(Math.cbrt(COUNT));
-    const spacing = 3.4;
+    const side = Math.round(Math.cbrt(COUNT)); // ~13
+    // Fits comfortably inside camera view at z=13, fov=45
+    // (13 * 0.85 ≈ 11 wide, vs chaos radius 6-9 — similar scale, so the
+    // transition feels like a "condensing" rather than a jump in size)
+    const spacing = 0.85;
     let gi = 0;
 
     for (let i = 0; i < COUNT; i++) {
@@ -65,7 +68,10 @@ function Field({ progress }) {
   const colors = useMemo(() => new Float32Array(COUNT * 3), []);
 
   useFrame((state, delta) => {
-    const p = easeInOutCubic(progress.current);
+    // Smoothly chase real scroll progress instead of snapping — avoids jitter
+    displayProgress.current += (progress.current - displayProgress.current) * Math.min(1, delta * 4);
+    const p = easeInOutCubic(displayProgress.current);
+
     const geo = pointsRef.current?.geometry;
     if (!geo) return;
 
